@@ -29,6 +29,8 @@ The application is organized into several sections accessible from the sidebar:
 - **NLP Pipeline**: Process text through NLP pipelines for detailed analysis
 - **Named Entity Recognition**: Identify medical entities in the transcriptions
 - **Topic Modeling**: Discover topics in the medical transcription corpus
+- **Medical Visualizations**: View interactive visualizations of medical data
+- **Advanced Visualizations**: Explore advanced NLP visualizations
 
 ### Getting Started
 1. Use the sidebar to navigate between different analysis sections
