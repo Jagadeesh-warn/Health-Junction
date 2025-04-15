@@ -91,8 +91,18 @@ class EnhancedMedicalChatbot:
         # Define medical entity keywords
         self._initialize_keywords()
         
-        # Load SpaCy model for entity recognition
-        self.nlp = load_spacy_model()
+        try:
+            # Load SpaCy model for entity recognition
+            self.nlp = load_spacy_model()
+            if self.nlp is None:
+                # Fallback - try to load directly
+                import spacy
+                self.nlp = spacy.load("en_core_web_sm")
+        except Exception as e:
+            # Create a dummy function to avoid errors if model loading fails
+            import types
+            self.nlp = types.SimpleNamespace()
+            self.nlp.__call__ = lambda x: []  # Dummy function
     
     def _initialize_keywords(self):
         """Initialize comprehensive medical keyword dictionaries for entity extraction"""
@@ -249,17 +259,24 @@ class EnhancedMedicalChatbot:
         """Use SpaCy for more advanced entity recognition"""
         try:
             # Process text with SpaCy (limit length for efficiency)
-            doc = self.nlp(text[:10000])
+            doc = self.nlp(text[:5000])  # Reduced length to avoid memory issues
             
-            # Extract medical entities based on entity types
+            # Extract medical entities based on common entity types in the model
             for ent in doc.ents:
-                # Map SpaCy's entity types to our categories
-                if ent.label_ == "DISEASE" or ent.label_ == "CONDITION":
+                # Standard SpaCy entity labels (en_core_web_sm doesn't have medical-specific labels)
+                if ent.label_ in ["ORG", "GPE", "LOC"]:
+                    # Skip location/organization entities
+                    continue
+                elif ent.label_ == "DISEASE" or ent.label_ == "CONDITION":
+                    # These are custom labels - may not exist in the base model
                     entities['diseases'].add(ent.text.lower())
                 elif ent.label_ == "SYMPTOM":
+                    # This is a custom label - may not exist in the base model
                     entities['symptoms'].add(ent.text.lower())
-                elif ent.label_ == "TREATMENT" or ent.label_ == "PROCEDURE":
-                    entities['treatments'].add(ent.text.lower())
+                elif ent.label_ == "CARDINAL" and len(ent.text) <= 3:
+                    # Numbers that might be related to recovery time
+                    if any(word in text.lower() for word in ["day", "days", "week", "weeks", "month"]):
+                        entities['recovery'].add(ent.text.lower())
         except Exception as e:
             # Fail silently, just use keyword matching
             pass

@@ -265,7 +265,9 @@ with tab5:
                     for word in set(words):
                         if word in word_freq and word_freq[word] >= 5:
                             if knowledge_graph.has_edge(specialty, word):
-                                knowledge_graph[specialty][word]['weight'] += 1
+                                # Safely update the weight 
+                                current_weight = knowledge_graph[specialty][word].get('weight', 0)
+                                knowledge_graph[specialty][word]['weight'] = current_weight + 1
                             else:
                                 knowledge_graph.add_edge(specialty, word, weight=1)
             
