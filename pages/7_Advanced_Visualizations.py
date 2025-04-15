@@ -97,6 +97,11 @@ with tab1:
     sample_size = min(10, len(data))
     st.info(f"Analyzing POS tags from {sample_size} sample medical transcriptions...")
     
+    # Check if 'transcription' column exists
+    if 'transcription' not in data.columns:
+        st.error("The dataset does not contain a 'transcription' column. Please load a valid dataset with transcription text.")
+        st.stop()
+        
     # Process sample data
     sample_texts = data['transcription'].head(sample_size).fillna("")
     all_pos_tags = []

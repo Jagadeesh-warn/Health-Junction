@@ -20,6 +20,15 @@ showing patterns and insights derived from the text analysis.
 # Load the sample data
 data = load_sample_data()
 
+# Check if required columns exist
+required_columns = ['transcription', 'medical_specialty']
+missing_columns = [col for col in required_columns if col not in data.columns]
+
+if missing_columns:
+    st.error(f"The following required columns are missing from the dataset: {', '.join(missing_columns)}")
+    st.info("Please make sure your dataset contains the necessary columns for visualization.")
+    st.stop()
+
 # Create tabs for different visualization categories
 tab1, tab2, tab3, tab4 = st.tabs(["Word Frequencies", "Medical Specialties", "Text Length Analysis", "Entity Visualizations"])
 
