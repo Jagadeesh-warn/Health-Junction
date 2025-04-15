@@ -30,7 +30,7 @@ The application is organized into several sections accessible from the sidebar:
 - **Named Entity Recognition**: Identify medical entities in the transcriptions
 - **Topic Modeling**: Discover topics in the medical transcription corpus
 - **Medical Visualizations**: View interactive visualizations of medical data
-- **Advanced Visualizations**: Explore advanced NLP visualizations
+- **Medical QA**: Ask medical questions and get answers from the transcriptions
 
 ### Getting Started
 1. Use the sidebar to navigate between different analysis sections
